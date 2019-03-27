@@ -75,9 +75,13 @@ WSGI_APPLICATION = 'digital_voting_app.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'voter_database',
+    'USER': 'dig_voting_app',
+    'PASSWORD': 'nitsrinagar',
+    'HOST': 'voting.chwhjsonyk28.ap-south-1.rds.amazonaws.com',
+    'PORT': '5432',
     }
 }
 
