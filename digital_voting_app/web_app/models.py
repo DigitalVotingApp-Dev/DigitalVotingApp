@@ -19,7 +19,7 @@ class Voter(models.Model):
     photograph_image_link = models.CharField(max_length = 300)
     signature_image_link = models.CharField(max_length = 300)
     aadhar_doc_link = models.CharField(max_length = 300)
-    #occupation = models.CharField(max_length = 100)
+    occupation = models.CharField(max_length = 100)
     date_of_birth = models.DateTimeField("Date of Birth")
 
     def __str__(self):
