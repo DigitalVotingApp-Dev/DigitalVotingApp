@@ -15,16 +15,12 @@ class Voter(models.Model):
     age = models.IntegerField()
     father_name = models.CharField(max_length = 200)
     mother_name = models.CharField(max_length = 200)
-    permanent_address_line_1 = models.TextField()
-    permanent_address_line_2 = models.TextField()
+    permanent_address = models.TextField()
     photograph_image_link = models.CharField(max_length = 300)
     signature_image_link = models.CharField(max_length = 300)
-    #aadhar_doc_link = models.CharField(max_length = 300)
-    #occupation = models.CharField(max_length = 100)
+    aadhar_doc_link = models.CharField(max_length = 300)
+    occupation = models.CharField(max_length = 100)
     date_of_birth = models.DateTimeField("Date of Birth")
-    #city = models.CharField(max_length = 200)
-    state = models.CharField(max_length = 200)
-    constituency = models.CharField(max_length = 200)
 
     def __str__(self):
         return self.name
@@ -46,8 +42,3 @@ class Voter(models.Model):
         hash['occupation'] = voter.occupation
         hash['dateOfBirth'] = voter.date_of_birth
         return hash
-
-class Constituency(models.Model):
-    name = models.CharField(max_length = 200)
-    city = models.CharField(max_length = 200)
-    state = models.CharField(max_length = 200)
