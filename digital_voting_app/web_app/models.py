@@ -21,7 +21,7 @@ class Voter(models.Model):
     signature_image_link = models.URLField(default = '')
     #aadhar_doc_link = models.CharField(max_length = 300)
     #occupation = models.CharField(max_length = 100)
-    date_of_birth = models.DateTimeField("Date of Birth")
+    #date_of_birth = models.DateTimeField("Date of Birth")
     #city = models.CharField(max_length = 200)
     state = models.CharField(max_length = 200, default = '')
     constituency = models.CharField(max_length = 200, default = 'CONSTITUENCY')
