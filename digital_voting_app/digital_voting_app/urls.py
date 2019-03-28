@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
+from web_app import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('web_app/', include('web_app.urls'))
+    path('web_app/', include('web_app.urls')),
+    url('^create_voter/', views.create_voter, name = 'login_action')
 ]

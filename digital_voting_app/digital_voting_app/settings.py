@@ -26,7 +26,11 @@ SECRET_KEY = 'q78aaplaq_gan1v8ylcx!j%tj(=t_1dgdo49d3cv7+@6-2x$(('
 DEBUG = True
 
 ALLOWED_HOSTS = []
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Application definition
 

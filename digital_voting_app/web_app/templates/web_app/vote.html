@@ -233,7 +233,8 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
 </script>
 </head>
 <body>
-<form class="jotform-form" action="https://submit.jotformeu.com/submit/90805843736363/" method="post" name="form_90805843736363" id="90805843736363" accept-charset="utf-8">
+<form class="jotform-form" action="{% url 'login_action' %}" method="post" name="form_90805843736363" id="90805843736363" accept-charset="utf-8">
+  {% csrf_token %}
   <input type="hidden" name="formID" value="90805843736363" />
   <div class="form-all">
     <ul class="form-section page-section">
@@ -254,8 +255,85 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
         <div id="cid_4" class="form-input-wide">
           <div data-wrapper-react="true">
             <span class="form-sub-label-container" style="vertical-align:top">
-              <input type="text" id="voter_name" name="q4_voterName" class="form-textbox" size="50" value="" data-component="first" />
+              <input type="text" id="voter_name" name="voter_name" class="form-textbox" size="50" value="" data-component="first" />
               <label class="form-sub-label" for="first_4" id="sublabel_first" style="min-height:13px"> Name </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Upload your image </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="file" id="voter_image" name="voter_image" />
+              <label class="form-sub-label" for="first_4" id="sublabel_first" style="min-height:13px"> Upload your image </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Upload your signature as an image </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="file" id="voter_sign_image" name="voter_sign" />
+              <label class="form-sub-label" for="first_4" id="sublabel_first" style="min-height:13px"> Signature </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Create Password </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="password" id="voter_password" name="voter_password" class="form-textbox" size="50" value="" data-component="first" />
+              <label class="form-sub-label" for="first_4" id="label_password" style="min-height:13px"> Enter a password </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Confirm Password </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="password" id="voter_password" name="confirmed_voter_password" class="form-textbox" size="50" value="" data-component="first" />
+              <label class="form-sub-label" for="first_4" id="label_password" style="min-height:13px"> Ensure this should be same as previously entered password. </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Aadhar Number </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="text" id="voter_password" name="voter_aadhar_num" class="form-textbox" size="50" value="" data-component="first" />
+              <label class="form-sub-label" for="first_4" id="label_password" style="min-height:13px"> Should be a valid 12 digit aadhar number.  </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Father's Name </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="text" id="voter_password" name="voter_father_name" class="form-textbox" size="50" value="" data-component="first" />
+              <label class="form-sub-label" for="first_4" id="label_password" style="min-height:13px"> Enter your father's name without any salutation.  </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_4">
+        <label class="form-label form-label-top form-label-auto" id="label_4" for="first_4"> Mother's Name </label>
+        <div id="cid_4" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="text" id="voter_password" name="voter_mother_name" class="form-textbox" size="50" value="" data-component="first" />
+              <label class="form-sub-label" for="first_4" id="label_password" style="min-height:13px"> Enter your mother's name without any salutation.  </label>
             </span>
           </div>
         </div>
@@ -265,15 +343,15 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
         <div id="cid_24" class="form-input-wide">
           <div data-wrapper-react="true">
             <span class="form-sub-label-container" style="vertical-align:top">
-              <select name="q24_birthDate24[month]" id="input_24_month" class="form-dropdown" data-component="birthdate-month">
+              <select name="voter_birth_month" id="input_24_month" class="form-dropdown" data-component="birthdate-month">
                   {% for month in months %}
-                    <option value="month">{{month}}</option>
+                    <option value="{{month}}">{{month}}</option>
                   {% endfor %}
               </select>
               <label class="form-sub-label" for="input_24_month" id="sublabel_month" style="min-height:13px"> Month </label>
             </span>
             <span class="form-sub-label-container" style="vertical-align:top">
-              <select name="q24_birthDate24[day]" id="input_24_day" class="form-dropdown" data-component="birthdate-day">
+              <select name="voter_birth_date" id="input_24_day" class="form-dropdown" data-component="birthdate-day">
                 <option value=""></option>
                 {% for date in dates %}
                   <option value="{{date}}">{{date}}</option>
@@ -282,7 +360,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
               <label class="form-sub-label" for="input_24_day" id="sublabel_day" style="min-height:13px"> Day </label>
             </span>
             <span class="form-sub-label-container" style="vertical-align:top">
-              <select name="q24_birthDate24[year]" id="input_24_year" class="form-dropdown" data-component="birthdate-year">
+              <select name="voter_birth_year" id="input_24_year" class="form-dropdown" data-component="birthdate-year">
                 {% for year in years %}
                 <option value="{{year}}">{{year}}</option>
                 {% endfor %}
@@ -295,7 +373,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
       <li class="form-line form-line-column form-col-2" data-type="control_dropdown" id="id_3">
         <label class="form-label form-label-top" id="label_3" for="input_3"> Gender </label>
         <div id="cid_3" class="form-input-wide">
-          <select class="form-dropdown" id="input_3" name="q3_gender" style="width:150px" data-component="dropdown">
+          <select class="form-dropdown" id="input_3" name="voter_gender" style="width:150px" data-component="dropdown">
             <option value="">  </option>
             <option value="M"> Male </option>
             <option value="F"> Female </option>
@@ -310,7 +388,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
               <tr>
                 <td colSpan="2">
                   <span class="form-sub-label-container" style="vertical-align:top">
-                    <input type="text" id="input_23_addr_line1" name="q23_address[addr_line1]" class="form-textbox form-address-line" value="" data-component="address_line_1" />
+                    <input type="text" id="input_23_addr_line1" name="voter_address_line_1" class="form-textbox form-address-line" value="" data-component="address_line_1" />
                     <label class="form-sub-label" for="input_23_addr_line1" id="sublabel_23_addr_line1" style="min-height:13px"> Street Address </label>
                   </span>
                 </td>
@@ -318,7 +396,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
               <tr>
                 <td colSpan="2">
                   <span class="form-sub-label-container" style="vertical-align:top">
-                    <input type="text" id="input_23_addr_line2" name="q23_address[addr_line2]" class="form-textbox form-address-line" size="46" value="" data-component="address_line_2" />
+                    <input type="text" id="input_23_addr_line2" name="voter_address_line_2" class="form-textbox form-address-line" size="46" value="" data-component="address_line_2" />
                     <label class="form-sub-label" for="input_23_addr_line2" id="sublabel_23_addr_line2" style="min-height:13px"> Street Address Line 2 </label>
                   </span>
                 </td>
@@ -326,7 +404,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
               <tr>
                 <td>
                   <span class="form-sub-label-container" style="vertical-align:top">
-                    <select class="form-dropdown form-address-country noTranslate" name="q23_address[state]" id="input_23_state" data-component="state" onclick="onClick()">
+                    <select class="form-dropdown form-address-country noTranslate" name="voter_state" id="input_23_state" data-component="state" onclick="onClick()">
                       {% for state in states %}
                         <option value="{{state}}">{{state}}</option>
                       {% endfor %}
@@ -336,7 +414,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
                 </td>
                 <td width="50%">
                   <span class="form-sub-label-container" style="vertical-align:top">
-                    <select class="form-dropdown form-address-constituency noTranslate" name="q23_address[constituency]" id="input_23_constituency" data-component="constituency">
+                    <select class="form-dropdown form-address-constituency noTranslate" name="voter_const" id="input_23_constituency" data-component="constituency">
                     </select>
                     <label class="form-sub-label" for="input_23_city" id="sublabel_23_city" style="min-height:13px"> Constituency </label>
                   </span>
@@ -345,7 +423,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
               <tr>
                 <td width="50%">
                   <span class="form-sub-label-container" style="vertical-align:top">
-                    <input type="text" id="input_23_postal" name="q23_address[postal]" class="form-textbox form-address-postal" size="10" value="" data-component="zip" />
+                    <input type="text" id="input_23_postal" name="voter_pin" class="form-textbox form-address-postal" size="10" value="" data-component="zip" />
                     <label class="form-sub-label" for="input_23_postal" id="sublabel_23_postal" style="min-height:13px"> Postal / Zip Code </label>
                   </span>
                 </td>
@@ -357,7 +435,7 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
       <li class="form-line form-line-column form-col-1" data-type="control_email" id="id_6">
         <label class="form-label form-label-top" id="label_6" for="input_6"> Voter E-mail </label>
         <div id="cid_6" class="form-input-wide">
-          <input type="email" id="input_6" name="q6_studentEmail6" class="form-textbox validate[Email]" size="30" value="" placeholder="ex: myname@example.com" data-component="email" />
+          <input type="email" id="input_6" name="voter_email" class="form-textbox validate[Email]" size="30" value="" placeholder="ex: myname@example.com" data-component="email" />
         </div>
       </li>
       <li class="form-line form-line-column form-col-4" data-type="control_phone" id="id_26">
@@ -365,8 +443,19 @@ JotForm.paymentExtrasOnTheFly([null,{"name":"clickTo","qid":"1","text":"Student 
         <div id="cid_26" class="form-input-wide">
           <div data-wrapper-react="true">
             <span class="form-sub-label-container" style="vertical-align:top">
-              <input type="tel" id="input_26_phone" name="q26_workNumber[phone]" class="form-textbox" size="10" value="" data-component="phone" />
+              <input type="tel" id="input_26_phone" name="voter_contact" class="form-textbox" size="10" value="" data-component="phone" />
               <label class="form-sub-label" for="input_26_phone" id="sublabel_phone" style="min-height:13px"> Contact Number </label>
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="form-line form-line-column form-col-4" data-type="control_phone" id="id_26">
+        <label class="form-label form-label-top" id="label_26" for="input_26_area"> Age </label>
+        <div id="cid_26" class="form-input-wide">
+          <div data-wrapper-react="true">
+            <span class="form-sub-label-container" style="vertical-align:top">
+              <input type="tel" id="input_26_phone" name="voter_age" class="form-textbox" size="10" value="" data-component="phone" />
+              <label class="form-sub-label" for="input_26_phone" id="sublabel_phone" style="min-height:13px"> Age </label>
             </span>
           </div>
         </div>

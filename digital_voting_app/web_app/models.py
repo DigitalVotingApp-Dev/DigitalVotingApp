@@ -7,24 +7,25 @@ class Voter(models.Model):
         ('F', 'FEMALE'),
     ]
     name = models.CharField(max_length = 200)
-    email_id = models.CharField(max_length = 20000)
+    email_id = models.CharField(max_length = 345)
     password = models.CharField(max_length = 60)
     aadhar_num = models.TextField(primary_key = True)
-    contact_num = models.IntegerField()
+    contact_num = models.CharField(max_length = 10)
     gender = models.CharField(max_length = 6, choices = GENDER_CHOICES)
     age = models.IntegerField()
     father_name = models.CharField(max_length = 200)
     mother_name = models.CharField(max_length = 200)
     permanent_address_line_1 = models.TextField()
-    permanent_address_line_2 = models.TextField()
-    photograph_image_link = models.CharField(max_length = 300)
-    signature_image_link = models.CharField(max_length = 300)
+    permanent_address_line_2 = models.TextField(default = '')
+    photograph_image_link = models.URLField(default = '')
+    signature_image_link = models.URLField(default = '')
     #aadhar_doc_link = models.CharField(max_length = 300)
     #occupation = models.CharField(max_length = 100)
     date_of_birth = models.DateTimeField("Date of Birth")
     #city = models.CharField(max_length = 200)
-    state = models.CharField(max_length = 200)
-    constituency = models.CharField(max_length = 200)
+    state = models.CharField(max_length = 200, default = '')
+    constituency = models.CharField(max_length = 200, default = 'CONSTITUENCY')
+    image = models.ImageField(upload_to = 'profile_image', blank = True)
 
     def __str__(self):
         return self.name
