@@ -56,8 +56,23 @@ def index(request):
     return render(request, 'web_app/vote.html', {"months": MONTH_DIGIT_LIST, "states": STATE_NAMES, "dates": DATE_DIGIT_LIST, "years": YEAR_LIST, "cons_list": CONSTITUENCY_LIST, "test_list": TEST_LIST})
 
 def create_voter(request):
-	params = request
-	voter_birthdate = params.POST['voter_birth_year'] + params.POST['voter_birth_month'] + params.POST['voter_birth_date']
-	voter = Voter(name = params.POST['voter_name'], age = params.POST['voter_age'], gender = params.POST['voter_gender'], email_id = params.POST['voter_email'], password = params.POST['voter_password'], aadhar_num = params.POST['voter_aadhar_num'], contact_num = params.POST['voter_contact'], father_name = params.POST['voter_father_name'], mother_name = params.POST['voter_mother_name'], permanent_address_line_1 = params.POST['voter_address_line_1'], permanent_address_line_2 = params.POST['voter_address_line_2'], date_of_birth = voter_birthdate)
-	voter.save()
+    voter_birthdate = request.POST['voter_birth_year'] + '-' + request.POST['voter_birth_month'] + '-' + request.POST['voter_birth_date']
+    print("voter_birthdate = " + voter_birthdate)
+    voter = Voter(name = request.POST['voter_name'], 
+    age = request.POST['voter_age'],
+    gender = request.POST['voter_gender'],
+    email_id = request.POST['voter_email'],
+    password = request.POST['voter_password'],
+    aadhar_num = request.POST['voter_aadhar_num'],
+    contact_num = request.POST['voter_contact'],
+    father_name = request.POST['voter_father_name'],
+    mother_name = request.POST['voter_mother_name'],
+    permanent_address_line_1 = request.POST['voter_address_line_1'],
+    permanent_address_line_2 = request.POST['voter_address_line_2'],
+    date_of_birth = voter_birthdate,
+    state = request.POST['voter_state'],
+    constituency = request.POST['voter_const'])
+    a=Voter(name = "Ashutosh",age=21, gender = "M", email_id = "ashutosh", password = "password", aadhar_num = "927752953828", contact_num = "9057322110", father_name = "Naveen Rahi", mother_name = "Poonam Rahi", permanent_address_line_1 = "hbefe", permanent_address_line_2 = "vdyFEF", date_of_birth = "1997-08-03", state = "Rajasthan", constituency = "Kota")
+    voter.save()
+    return HttpResponse("<h1>DETAILS SAVED SUCCESSFULLY!!</h1>")
 
