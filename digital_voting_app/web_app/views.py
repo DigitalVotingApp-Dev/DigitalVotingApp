@@ -45,6 +45,7 @@ def index(request):
     "West Bengal": ['Cooch Behar', 'Alipurduars', 'Jalpaiguri', 'Darjeeling', 'Raiganj', 'Balurghat', 'Maldaha Uttar', 'Maldaha Dakshin', 'Jangipur', 'Baharampur', 'Murshidabad', 'Krishnanagar', 'Ranaghat', 'Bangaon', 'Barrackpur', 'Dum Dum', 'Barasat', 'Basirhat', 'Jaynagar', 'Mathurapur', 'Diamond Harbour', 'Jadavpur', 'Kolkata Dakshin', 'Kolkata Uttar', 'Howrah', 'Uluberia', 'Srerampur', 'Hooghly', 'Arambag', 'Tamluk', 'Kanthi', 'Ghatal', 'Jhargram', 'Medinipur', 'Purulia', 'Bankura', 'Bishnupur', 'Bardhaman Purba', 'Bardhaman–Durgapur', 'Asansol', 'Bolpur', 'Birbhum']
     }
 
+
     # if request.method == 'POST':
     #     form = DocumentForm(request.POST, request.FILES)
     #     if form.is_valid():
@@ -59,3 +60,4 @@ def create_voter(request):
 	voter_birthdate = params.POST['voter_birth_year'] + params.POST['voter_birth_month'] + params.POST['voter_birth_date']
 	voter = Voter(name = params.POST['voter_name'], age = params.POST['voter_age'], gender = params.POST['voter_gender'], email_id = params.POST['voter_email'], password = params.POST['voter_password'], aadhar_num = params.POST['voter_aadhar_num'], contact_num = params.POST['voter_contact'], father_name = params.POST['voter_father_name'], mother_name = params.POST['voter_mother_name'], permanent_address_line_1 = params.POST['voter_address_line_1'], permanent_address_line_2 = params.POST['voter_address_line_2'], date_of_birth = voter_birthdate)
 	voter.save()
+
