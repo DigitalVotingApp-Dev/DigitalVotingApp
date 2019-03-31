@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,7 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap_datepicker_plus',
 ]
+
+# Use BOOTSTRAP3 if you are using Bootstrap 3
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
