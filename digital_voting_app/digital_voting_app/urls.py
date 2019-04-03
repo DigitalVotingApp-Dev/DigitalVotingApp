@@ -26,7 +26,9 @@ urlpatterns = [
     path('web_app/', include('web_app.urls')),
     url('^create_voter/', views.create_voter, name = 'login_action'),
     url('^register_voter/', views.register_voter, name = 'register_voter_action'),
-    url('^login/', views.login_voter, name = 'login_voter_action')
+    url('^login/', views.login_voter, name = 'login_voter_action'),
+    url('^profile/', views.load_voter_profile, name = 'profile_voter_action'),
+    url('^registration_successful/', views.prompt_login, name = 'prompt_login_action')
 ]
 
 if settings.DEBUG:

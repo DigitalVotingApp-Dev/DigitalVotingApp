@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from web_app.models import Voter
-from .forms import VoterRegistrationForm
+from .forms import VoterRegistrationForm, LoginForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 def index(request):
@@ -46,15 +46,6 @@ def index(request):
     "Uttarakhand": ['', 'Tehri Garhwal', 'Garhwal', 'Almora', 'Nainital–Udhamsingh Nagar', 'Haridwar'],
     "West Bengal": ['', 'Cooch Behar', 'Alipurduars', 'Jalpaiguri', 'Darjeeling', 'Raiganj', 'Balurghat', 'Maldaha Uttar', 'Maldaha Dakshin', 'Jangipur', 'Baharampur', 'Murshidabad', 'Krishnanagar', 'Ranaghat', 'Bangaon', 'Barrackpur', 'Dum Dum', 'Barasat', 'Basirhat', 'Jaynagar', 'Mathurapur', 'Diamond Harbour', 'Jadavpur', 'Kolkata Dakshin', 'Kolkata Uttar', 'Howrah', 'Uluberia', 'Srerampur', 'Hooghly', 'Arambag', 'Tamluk', 'Kanthi', 'Ghatal', 'Jhargram', 'Medinipur', 'Purulia', 'Bankura', 'Bishnupur', 'Bardhaman Purba', 'Bardhaman–Durgapur', 'Asansol', 'Bolpur', 'Birbhum']
     }
-
-
-    # if request.method == 'POST':
-    #     form = DocumentForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         form.save()
-    #         #return redirect('home')
-    # else:
-    #     form = DocumentForm()
     return render(request, 'web_app/vote.html', {"months": MONTH_DIGIT_LIST, "states": STATE_NAMES, "dates": DATE_DIGIT_LIST, "years": YEAR_LIST, "cons_list": CONSTITUENCY_LIST, "test_list": TEST_LIST})
 
 def create_voter(request):
@@ -81,50 +72,74 @@ def create_voter(request):
 
 @ensure_csrf_cookie
 def register_voter(request):
-	if request.method == 'POST':
-		form = VoterRegistrationForm(request.POST, request.FILES)
-		if form.is_valid():
-			_name = form.cleaned_data['name']
-			_email_id = form.cleaned_data['email_id']
-			_password = form.cleaned_data['password']
-			_aadhar_num = form.cleaned_data['aadhar_num']
-			_contact_num = form.cleaned_data['contact_num']
-			_gender = form.cleaned_data['gender']
-			_age = form.cleaned_data['age']
-			_father_name = form.cleaned_data['father_name']
-			_mother_name = form.cleaned_data['mother_name']
-			_permanent_address_line_1 = form.cleaned_data['permanent_address_line_1']
-			_permanent_address_line_2 = form.cleaned_data['permanent_address_line_2']
-			_state = form.cleaned_data['state']
-			_constituency = form.cleaned_data['constituency']
-			voter = Voter(name = _name,
-				email_id = _email_id,
-				password = _password,
-				aadhar_num = _aadhar_num,
-				contact_num = _contact_num,
-				gender = _gender,
-				age = _age,
-				father_name = _father_name,
-				mother_name = _mother_name,
-				permanent_address_line_1 = _permanent_address_line_1,
-				permanent_address_line_2 = _permanent_address_line_2,
-				state = _state,
-				constituency = _constituency,
-				image = form.cleaned_data['voter_image'])
-			#voter.image = request.FILES['voter_image']
-			voter.save()
-			print("\n\nDETAILS OF VOTER: " + _name + " HAVE BEEN COMMITTED TO THE DB.\n\n")
-			return HttpResponseRedirect('/login/')
-		else:
-			print("\n\n#DIGITAL_VOTING_APP#VIEWS#2: FOLLOWING ERRORS OCCURRED WHILE PROCESSING")
-			print(form.errors)
-			for error in form.errors:
-				print("**" + error + "**")
+    if request.method == 'POST':
+        form = VoterRegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            _name = form.cleaned_data['name']
+            _email_id = form.cleaned_data['email_id']
+            _password = form.cleaned_data['password']
+            _aadhar_num = form.cleaned_data['aadhar_num']
+            _contact_num = form.cleaned_data['contact_num']
+            _gender = form.cleaned_data['gender']
+            _age = form.cleaned_data['age']
+            _father_name = form.cleaned_data['father_name']
+            _mother_name = form.cleaned_data['mother_name']
+            _permanent_address_line_1 = form.cleaned_data['permanent_address_line_1']
+            _permanent_address_line_2 = form.cleaned_data['permanent_address_line_2']
+            _state = form.cleaned_data['state']
+            _constituency = form.cleaned_data['constituency']
+            voter = Voter(name = _name,
+                email_id = _email_id,
+                password = _password,
+                aadhar_num = _aadhar_num,
+                contact_num = _contact_num,
+                gender = _gender,
+                age = _age,
+                father_name = _father_name,
+                mother_name = _mother_name,
+                permanent_address_line_1 = _permanent_address_line_1,
+                permanent_address_line_2 = _permanent_address_line_2,
+                state = _state,
+                constituency = _constituency,
+                image = form.cleaned_data['voter_image'])
+            voter.save()
+            return HttpResponseRedirect("/registration_successful/")
+        else:
+            print("\n\n#DIGITAL_VOTING_APP#VIEWS#2: FOLLOWING ERRORS OCCURRED WHILE PROCESSING")
+            print(form.errors)
+            for error in form.errors:
+                print("**" + error + "**")
 
-	else:
-		form = VoterRegistrationForm()
-	return render(request, 'web_app/register_voter.html', {'form': form})
+    else:
+        form = VoterRegistrationForm()
+    return render(request, 'web_app/register_voter.html', {'form': form})
 
+def prompt_login(request):
+    arr = request.path.split('/')
+    _url = arr[0] + arr[1] + '/login/'
+    print("_url = " + _url)
+    return HttpResponse("<h1>Registration successful. Please <a href='/login'>login</a> to continue.</h1>")
+
+def load_voter_profile(request):
+    arr = request.path.split('/')
+    _aadhar_num = arr[2]
+    print("\n\nAADHAR NUMBER BEING SENT: " + _aadhar_num)
+    voter = Voter.objects.get(aadhar_num = _aadhar_num)
+    #voter_details = Voter.present_voter(_aadhar_num)
+    #print("VOTER DETAILS: " + voter_details['name'])
+    return render(request, 'web_app/voter_profile.html', {'voter': voter})
 
 def login_voter(request):
-	return HttpResponse("<h1>Login Page</h1>")
+    if request.method == 'POST':
+        form = LoginForm(request.POST, request.FILES)
+        if form.is_valid:
+            _email_id = form.cleaned_data['email_id']
+            _password = form.cleaned_data['password']
+            voter = Voter.objects.get(email_id = _email_id)
+            if voter && (_password == voter.password):
+                return HttpResponse('<h1>Logged in Successfully.</h1>')
+            else:
+                return HttpResponse('<h1>Login attempt unsuccessful</h1>')
+    else:
+        form = LoginForm()
+    return render(request, 'web_app/login_voter.html', {'form':form})

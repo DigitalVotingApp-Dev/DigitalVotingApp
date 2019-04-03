@@ -28,7 +28,7 @@ class Voter(models.Model):
     image = models.ImageField(upload_to = 'profile_images/', default = "default.jpg")
 
     def __str__(self):
-        return self.name
+        return self.name + " WHO IS FROM " + self.constituency
 
     def with_aadhar_num(str):
         return Voter.objects.get(aadhar_num = str)
@@ -36,6 +36,7 @@ class Voter(models.Model):
     def present_voter(aadhar_number):
         hash = {}
         voter = Voter.objects.get(aadhar_num = aadhar_number)
+        print(voter)
         hash['name'] = voter.name
         hash['emailId'] = voter.email_id
         hash['aadharNum'] = voter.aadhar_num
@@ -44,6 +45,6 @@ class Voter(models.Model):
         hash['age'] = voter.age
         hash['fatherName'] = voter.father_name
         hash['motherName'] = voter.mother_name
-        hash['occupation'] = voter.occupation
-        hash['dateOfBirth'] = voter.date_of_birth
+        #hash['dateOfBirth'] = voter.date_of_birth
+        hash['constituency'] = voter.constituency
         return hash
