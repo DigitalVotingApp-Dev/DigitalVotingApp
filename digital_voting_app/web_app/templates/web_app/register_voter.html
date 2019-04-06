@@ -15,7 +15,14 @@
 	<link rel="stylesheet" href="{% static 'css/dig_app_styles.css' %}">
 	<script src="{% static 'js/notify.js' %}"></script>
 	<script src="{% static 'js/voter_registration.js' %}"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	<script type="text/javascript">
+		var renderedPasswordErrorText = 0;
+		var correctedPassword = 0;
+		var correctedOnce = 0;
+		var renderedContactErrorText = 0;
+		var correctedContact = 0;
+		var correctedOnceContact = 0;
 		function launch_toast() {
 		    var x = document.getElementById("toast")
 		    x.className = "show";
@@ -26,6 +33,85 @@
 			$.notify("Successfully registered", "success");
 		}
 
+		function verifyPasswordMatch() {
+			var password = document.getElementById("id_password");
+			var confirm_password = document.getElementById("id_confirm_password");
+			var error_statement = document.createElement("tr");
+			var error_statement_child = document.createElement("td");
+			error_statement_child.setAttribute("colspan", 2);
+			error_statement.setAttribute("id", "password_error_text");
+			error_statement.setAttribute("style", "width: 100%; font-size: 10px; display: inline; color: red; float: right;");
+			if(password.value == confirm_password.value) {
+				correctedOnce = 1;
+				correctedPassword = 1;
+				if (correctedPassword == 1) {
+					$("#id_confirm_password").tooltip('dispose');
+					var error_state = document.getElementById("password_error_text");
+					if(error_state != null) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				password.style.border = "solid 4px green";
+				confirm_password.style.border = "solid 4px green";
+			}
+			else {
+				$("#id_confirm_password").tooltip({title: "PLEASE ENSURE THAT THE PASSWORD AND CONFIRMED PASSWORD FIELDS MATCH", delay: {show: 0, hide: 10000000}, trigger: "focus"});
+				var error_text = document.createTextNode("Password and Confirmed Password don't match");
+				error_statement_child.appendChild(error_text);
+				error_statement.appendChild(error_statement_child);
+				if (renderedPasswordErrorText == 0 || correctedOnce == 1) {
+					confirm_password.parentElement.parentElement.parentElement.insertBefore(error_statement, confirm_password.parentElement.parentElement);
+					renderedPasswordErrorText = 1;
+				}
+				if (correctedPassword == 1) {
+					var error_state = document.getElementById("password_error_text");
+					if (error_state) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				password.style.border = "solid 4px red";
+				confirm_password.style.border = "solid 4px red";
+			}
+		}
+
+		function verifyContactMatchV2() {
+			var contact_num_tag = document.getElementById("id_contact_num");
+			var error_statement = document.createElement("tr");
+			var error_statement_child = document.createElement("td");
+			error_statement_child.setAttribute("colspan", 2);
+			error_statement.setAttribute("id", "contact_error_text");
+			error_statement.setAttribute("style", "width: 100%; font-size: 10px; display: inline; color: red; float: right;");
+			if(/^[1-9]{1}[0-9]{9}$/.test(contact_num_tag.value)) {
+				correctedOnceContact = 1;
+				correctedContact = 1;
+				if (correctedContact == 1) {
+					$("#id_contact_num").tooltip('dispose');
+					var error_state = document.getElementById("contact_error_text");
+					if(error_state != null) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				contact_num_tag.style.border = "solid 4px green";
+			}
+			else {
+				$("#id_contact_num").tooltip({title: "PLEASE ENSURE THAT THE CONTACT NUMBER IS OF 10 DIGITS", delay: {show: 0, hide: 10000000}, trigger: "focus"});
+				var error_text = document.createTextNode("Contact Number should be of 10 digits");
+				error_statement_child.appendChild(error_text);
+				error_statement.appendChild(error_statement_child);
+				if (renderedContactErrorText == 0 || correctedOnceContact == 1) {
+					contact_num_tag.parentElement.parentElement.parentElement.insertBefore(error_statement, contact_num_tag.parentElement.parentElement);
+					renderedContactErrorText = 1;
+				}
+				if (correctedContact == 1) {
+					var error_state = document.getElementById("contact_error_text");
+					if (error_state) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				contact_num_tag.style.border = "solid 4px red";
+			}
+		}
+
 		function verifyFields() {
 			var name = document.getElementById("id_name");
 			var email = document.getElementById("id_email_id");
@@ -33,27 +119,36 @@
 			var confirm_password = document.getElementById("id_confirm_password");
 			var aadhar_num = document.getElementById("id_aadhar_num");
 			var contact_num = document.getElementById("id_contact_num");
-			console.log("2");
 
 			if(validateEmail(email.value) && passwordConfirmed(password.value, confirm_password.value)) {
-				console.log("1");
 				$("#modalLoginForm").modal();
 				return true;
 			}
 			return false;
 		}
 
-		function validateEmail(email) {
-			console.log("in validateEmail");
-  			var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  			return re.test(email);
+		function validateEmail() 
+		{
+			var email_tag = document.getElementById("id_email_id");
+
+		 if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email_tag.value))
+		  {
+		  	email_tag.style.border = "solid 4px green";
+		    return (true);
+		  }
+		    email_tag.style.border = "solid 4px red";
+		    return (false);
 		}
 
 		function passwordConfirmed(password, confirm_password)
 		{
-			console.log("IN passwordConfirmed");
 			return (password == confirm_password);
 		}
+</script>
+<script>
+	$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
 </script>
 <link type="text/css" href="/media/jquery/css/smoothness/jquery-ui-1.8.18.custom.css" rel="Stylesheet" />
 <script type="text/javascript" src="/media/jquery/js/jquery-1.7.1.min.js"></script>
@@ -61,8 +156,13 @@
 <script type="text/javascript" src="/media/jquery/development-bundle/ui/i18n/jquery.ui.datepicker-{{request.LANGUAGE_CODE}}.js"></script>
 </head>
 <body>
-	<div class="container-fluid" style="background: midnightblue; height: 210px; padding-top: 20px;">
+	<div class="container-fluid" style="background: midnightblue; background-image: linear-gradient(to right, midnightblue , slateblue); height: 210px; padding-top: 20px;">
 		<h1 style="font-family: 'Poppins'; color: #FFFFFF; position: relative; top: 30px; vertical-align: middle;" align="center">VOTER REGISTRATION PORTAL</h1>
+		<div class="text-center">
+			<button style="position: relative; top: 50px;" type="button" class="btn btn-raised btn-primary" data-toggle="modal" data-target="#modalLoginForm">
+				Guidelines for filling up this form
+			</button>
+		</div>
 	</div>
 	<div class="container-fluid" style="background: slateblue; height: 45px;">
 		<marquee style="color: yellow; position: relative; top: 10px;">Registration for Lok Sabha Elections 2019 have started. Please register yourself and your family members by or before 5th March, 2019 for the same. Thank you!</marquee>
@@ -73,12 +173,17 @@
 			<table align="center">
 				{{form.as_table}}
 			</table>
-			<input style = "position: relative; top: 140px;" align="center" type="submit" name="submit" value="Submit" class="btn-success" onclick="verifyFields()" />
+			<br><br><br>
+			<table align="center">
+				<tr><th>
+			<input type="submit" name="submit" value="Submit" class="btn-success" onclick="verifyFields()" />
+			</tr>
+			</table>
 		</form>
 	</div>
 
 	<!-- EXTRAS -->
-	<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+	<!-- <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -107,11 +212,31 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="text-center">
-  <a href="" style="position: relative; top: 300px;" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch
-    Modal Login Form</a>
+</div> -->
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" style="color: midnightblue">Guidelines</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5" style="font-family: 'Poppins'; font-size: 15px;">
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">The email ID should be a valid one, we will verify it using OTP.</p><br><br>
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">The contact number should be of ten digits exactly, no need to enter country code (+91).</p><br><br>
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">Please ensure that you enter correct constituency.</p><br><br>
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">Please ensure that the photograph that you upload should cover at least 50% of your face. If that requirement is not met you might not be eligible to vote.</p><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

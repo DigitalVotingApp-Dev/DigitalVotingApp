@@ -13,9 +13,10 @@
 table {
 	position: relative;
 	top: 100px;
-	width: 600px;
+	/*width: 600px;*/
 	color: #808080;
 	font-family: 'Montserrat';
+	border-spacing: 100px;
 }
 
 .form-control {

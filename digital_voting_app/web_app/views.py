@@ -136,7 +136,7 @@ def login_voter(request):
             _email_id = form.cleaned_data['email_id']
             _password = form.cleaned_data['password']
             voter = Voter.objects.get(email_id = _email_id)
-            if voter && (_password == voter.password):
+            if voter and _password == voter.password:
                 return HttpResponse('<h1>Logged in Successfully.</h1>')
             else:
                 return HttpResponse('<h1>Login attempt unsuccessful</h1>')

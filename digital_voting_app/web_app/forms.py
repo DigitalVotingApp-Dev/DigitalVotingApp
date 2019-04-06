@@ -28,6 +28,15 @@ class VoterRegistrationForm(forms.Form):
  			visible.field.widget.attrs['class'] = 'form-control'
  			if visible.field.label == 'State':
  				visible.field.widget.attrs['onclick'] = 'onClick()'
+ 				visible.field.widget.attrs['onkeyup'] = 'onClick()'
+ 			if visible.field.label == 'Email':
+ 				visible.field.widget.attrs['onkeyup'] = 'validateEmail()'
+ 				visible.field.widget.attrs['data-toggle'] = 'tooltip'
+ 				visible.field.widget.attrs['title'] = 'Please enter a vaild email id'
+ 			if visible.field.label == 'Confirm Password':
+ 				visible.field.widget.attrs['onkeyup'] = 'verifyPasswordMatch()'
+ 			if visible.field.label == 'Contact Number':
+ 				visible.field.widget.attrs['onkeyup'] = 'verifyContactMatchV2()'
 
 class LoginForm(forms.Form):
 	email_id = forms.EmailField(label = 'Email', required = True, widget=forms.TextInput(attrs={'placeholder': 'abc@example.com'}))

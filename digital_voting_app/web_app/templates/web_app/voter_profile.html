@@ -21,24 +21,11 @@
 	<script type="text/javascript" src="/media/jquery/development-bundle/ui/i18n/jquery.ui.datepicker-{{request.LANGUAGE_CODE}}.js"></script>
 </head>
 <body>
-	<h1>Voter Profile</h1>
-	<table>
-		<tr>
-			<th>Name</th>
-			<td>{{voter.name}}</td>
-		</tr>
-		<tr>
-			<th>Age</th>
-			<td>{{voter.age}}</td>
-		</tr>
-		<tr>
-			<th>Gender</th>
-			<td>{{voter.gender}}</td>
-		</tr>
-		<tr>
-			<th>Constituency</th>
-			<td>{{voter.constituency}}</td>
-		</tr>
-	</table>
+	<div class="container-fluid" style="background: midnightblue; height: 210px; padding-top: 20px;"><h1>Voter Profile</h1></div>
+	<img style="float: right; position: relative; right: 40px; top: 40px;" src="/media/{{voter.image}}">
+			{{voter.name}}
+			{{voter.age}}
+			{{voter.gender}}
+			{{voter.constituency}}
 </body>
 </html>
