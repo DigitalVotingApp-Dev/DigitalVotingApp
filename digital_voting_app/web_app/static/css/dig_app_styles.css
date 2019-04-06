@@ -13,9 +13,10 @@
 table {
 	position: relative;
 	top: 100px;
-	width: 600px;
+	/*width: 600px;*/
 	color: #808080;
 	font-family: 'Montserrat';
+	border-spacing: 100px;
 }
 
 .form-control {
@@ -123,27 +124,3 @@ table {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 60px; opacity: 0;}
 }
-
-    body {
-      animation: colorchange 50s; /* animation-name followed by duration in seconds*/
-         /* you could also use milliseconds (ms) or something like 2.5s */
-      -webkit-animation: colorchange 50s; /* Chrome and Safari */
-    }
-
-    @keyframes colorchange
-    {
-      0%   {background: red;}
-      25%  {background: yellow;}
-      50%  {background: blue;}
-      75%  {background: green;}
-      100% {background: red;}
-    }
-
-    @-webkit-keyframes colorchange /* Safari and Chrome - necessary duplicate */
-    {
-      0%   {background: red;}
-      25%  {background: yellow;}
-      50%  {background: blue;}
-      75%  {background: green;}
-      100% {background: red;}
-    }

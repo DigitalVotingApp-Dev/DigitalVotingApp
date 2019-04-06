@@ -14,8 +14,15 @@
 	{% load static %}
 	<link rel="stylesheet" href="{% static 'css/dig_app_styles.css' %}">
 	<script src="{% static 'js/notify.js' %}"></script>
+	<script src="{% static 'js/voter_registration.js' %}"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	<script type="text/javascript">
-
+		var renderedPasswordErrorText = 0;
+		var correctedPassword = 0;
+		var correctedOnce = 0;
+		var renderedContactErrorText = 0;
+		var correctedContact = 0;
+		var correctedOnceContact = 0;
 		function launch_toast() {
 		    var x = document.getElementById("toast")
 		    x.className = "show";
@@ -25,57 +32,123 @@
 		function generate_notification() {
 			$.notify("Successfully registered", "success");
 		}
-	  function onClick() {
-		    var cons_list = {"Andhra Pradesh": ['','Araku', 'Srikakulam', 'Vizianagaram', 'Visakhapatnam', 'Anakapalli', 'Kakinada', 'Amalapuram', 'Rajahmundry', 'Narasapuram', 'Eluru', 'Machilipatnam', 'Vijayawada', 'Guntur', 'Narasaraopet', 'Bapatla', 'Ongole', 'Nandyal', 'Kurnool', 'Anantapur', 'Hindupur', 'Kadapa', 'Nellore', 'Tirupati', 'Rajampet', 'Chittoor'],
-	    "Arunachal Pradesh": ['','Arunachal West', 'Arunachal East'],
-	    "Assam": ['', 'Karimganj', 'Silchar', 'Autonomous District', 'Dhubri', 'Kokrajhar', 'Barpeta', 'Gauhati', 'Mangaldoi', 'Tezpur', 'Nowgong', 'Kaliabor', 'Jorhat', 'Dibrugarh', 'Lakhimpur'],
-	    "Bihar": ['', 'Valmiki Nagar', 'Paschim Champaran', 'Purvi Champaran', 'Sheohar', 'Sitamarhi', 'Madhubani', 'Jhanjharpur', 'Supaul', 'Araria', 'Kishanganj', 'Katihar', 'Purnia', 'Madhepura', 'Darbhanga', 'Muzaffarpur', 'Vaishali', 'Gopalganj', 'Siwan', 'Maharajganj', 'Saran', 'Hajipur', 'Ujiarpur', 'Samastipur', 'Begusarai', 'Khagaria', 'Bhagalpur', 'Banka', 'Munger', 'Nalanda', 'Patna Sahib', 'Pataliputra', 'Arrah', 'Buxar', 'Sasaram', 'Karakat', 'Jahanabad', 'Aurangabad', 'Gaya', 'Nawada', 'Jamui'],
-	    "Chattisgarh": ['', 'Sarguja', 'Raigarh', 'Janjgir', 'Korba', 'Bilaspur', 'Rajnandgaon', 'Durg', 'Raipur', 'Mahasamund', 'Bastar', 'Kanker'], 
-	    "Goa": ['', 'North Goa', 'South Goa'], 
-	    "Gujarat": ['', 'Kachchh', 'Banaskantha', 'Patan', 'Mahesana', 'Sabarkantha', 'Gandhinagar', 'Ahmedabad East', 'Ahmedabad West', 'Surendranagar', 'Rajkot', 'Porbandar', 'Jamnagar', 'Junagadh', 'Amreli', 'Bhavnagar', 'Anand', 'Kheda', 'Panchmahal', 'Dahod', 'Vadodara', 'Chhota Udaipur', 'Bharuch', 'Bardoli', 'Surat', 'Navsari', 'Valsad'], 
-	    "Haryana": ['', 'Ambala', 'Kurukshetra', 'Sirsa', 'Hissar', 'Karnal', 'Sonipat', 'Rohtak', 'Bhiwani–Mahendragarh', 'Gurgaon', 'Faridabad'],
-	    "Himachal Pradesh": ['', 'Kangra', 'Mandi', 'Hamirpur', 'Shimla'],
-	    "Jammu & Kashmir": ['', 'Baramulla', 'Srinagar', 'Anantnag', 'Ladakh', 'Udhampur', 'Jammu'], 
-	    "Jharkhand": ['', 'Rajmahal', 'Dumka', 'Godda', 'Chatra', 'Kodarma', 'Giridih', 'Dhanbad', 'Ranchi', 'Jamshedpur', 'Singhbhum', 'Khunti', 'Lohardaga', 'Palamau', 'Hazaribagh'], 
-	    "Karnataka": ['', 'Chikkodi', 'Belagavi', 'Bagalkot', 'Bijapur', 'Kalaburagi', 'Raichur', 'Bidar', 'Koppal', 'Bellary', 'Haveri', 'Dharwad', 'Uttara Kannada', 'Davanagere', 'Shimoga', 'Udupi Chikmagalur', 'Hassan', 'Dakshina Kannada', 'Chitradurga', 'Tumkur', 'Mandya', 'Mysore', 'Chamarajanagar', 'Bangalore Rural', 'Bangalore North', 'Bangalore Central', 'Bangalore South', 'Chikballapur', 'Kolar'], 
-	    "Kerala": ['', 'Kasaragod', 'Kannur', 'Vatakara', 'Wayanad', 'Kozhikode', 'Malappuram', 'Ponnani', 'Palakkad', 'Alathur', 'Thrissur', 'Chalakudy', 'Ernakulam', 'Idukki', 'Kottayam', 'Alappuzha', 'Mavelikara', 'Pathanamthitta', 'Kollam', 'Attingal', 'Thiruvananthapuram'], 
-	    "Madhya Pradesh": ['', 'Morena', 'Bhind', 'Gwalior', 'Guna', 'Sagar', 'Tikamgarh', 'Damoh', 'Khajuraho', 'Satna', 'Rewa', 'Sidhi', 'Shahdol', 'Jabalpur', 'Mandla', 'Balaghat', 'Chhindwara', 'Hoshangabad', 'Vidisha', 'Bhopal', 'Rajgarh', 'Dewas', 'Ujjain', 'Mandsaur', 'Ratlam', 'Dhar', 'Indore', 'Khargone', 'Khandwa', 'Betul'],
-	    "Maharashtra": ['', 'Nandurbar', 'Dhule', 'Jalgaon', 'Raver', 'Buldhana', 'Akola', 'Amravati', 'Wardha', 'Ramtek', 'Nagpur', 'Bhandara–Gondiya', 'Gadchiroli–Chimur', 'Chandrapur', 'Yavatmal–Washim', 'Hingoli', 'Nanded', 'Parbhani', 'Jalna', 'Aurangabad', 'Dindori', 'Nashik', 'Palghar', 'Bhiwandi', 'Kalyan', 'Thane', 'Mumbai North', 'Mumbai North West', 'Mumbai North East', 'Mumbai North Central', 'Mumbai South Central', 'Mumbai South', 'Raigad', 'Maval', 'Pune', 'Baramati', 'Shirur', 'Ahmednagar', 'Shirdi', 'Beed', 'Osmanabad', 'Latur', 'Solapur', 'Madha', 'Sangli', 'Satara', 'Ratnagiri–Sindhudurg', 'Kolhapur', 'Hatkanangle'], 
-	    "Manipur": ['', 'Inner Manipur', 'Outer Manipur'], 
-	    "Meghalaya": ['', 'Shillong', 'Tura'],
-	    "Mizoram": ['', 'Mizoram'],
-	    "Nagaland": ['', 'Nagaland'], 
-	    "Odisha": ['', 'Bargarh', 'Sundargarh', 'Sambalpur', 'Keonjhar', 'Mayurbhanj', 'Balasore', 'Bhadrak', 'Jajpur', 'Dhenkanal', 'Bolangir', 'Kalahandi', 'Nabarangpur', 'Kandhamal', 'Cuttack', 'Kendrapara', 'Jagatsinghpur', 'Puri', 'Bhubaneswar', 'Aska', 'Berhampur', 'Koraput'],
-	    "Punjab": ['', 'Gurdaspur', 'Amritsar', 'Khadoor Sahib', 'Jalandhar', 'Hoshiarpur', 'Anandpur Sahib', 'Ludhiana', 'Fatehgarh Sahib', 'Faridkot', 'Firozpur', 'Bathinda', 'Sangrur', 'Patiala'],
-	    "Rajasthan": ['', 'Ganganagar', 'Bikaner', 'Churu', 'Jhunjhunu', 'Sikar', 'Jaipur Rural', 'Jaipur', 'Alwar', 'Bharatpur', 'Karauli–Dholpur', 'Dausa', 'Tonk–Sawai Madhopur', 'Ajmer', 'Nagaur', 'Pali', 'Jodhpur', 'Barmer', 'Jalore', 'Udaipur', 'Banswara', 'Chittorgarh', 'Rajsamand', 'Bhilwara', 'Kota', 'Jhalawar–Baran'],
-	    "Sikkim": ['', 'Sikkim'],
-	    "Tamil Nadu": ['', 'Thiruvallur', 'Chennai North', 'Chennai South', 'Chennai Central', 'Sriperumbudur', 'Kancheepuram', 'Arakkonam', 'Vellore', 'Krishnagiri', 'Dharmapuri', 'Tiruvannamalai', 'Arani', 'Villupuram', 'Kallakurichi', 'Salem', 'Namakkal', 'Erode', 'Tiruppur', 'Nilgiris', 'Coimbatore', 'Pollachi', 'Dindigul', 'Karur', 'Tiruchirappalli', 'Perambalur', 'Cuddalore', 'Chidambaram', 'Mayiladuturai', 'Nagapattinam', 'Thanjavur', 'Sivaganga', 'Madurai', 'Theni', 'Virudhunagar', 'Ramanathapuram', 'Thoothukudi', 'Tenkasi', 'Tirunelveli', 'Kanyakumari'],
-	    "Telangana": ['', 'Adilabad', 'Peddapalle', 'Karimnagar', 'Nizamabad', 'Zahirabad', 'Medak', 'Malkajgiri', 'Secunderabad', 'Hyderabad', 'Chevella', 'Mahbubnagar', 'Nagarkurnool', 'Nalgonda', 'Bhongir', 'Warangal', 'Mahabubabad', 'Khammam'],
-	    "Tripura": ['', 'Tripura West', 'Tripura East'],
-	    "Uttar Pradesh": ['', 'Saharanpur', 'Kairana', 'Muzaffarnagar', 'Bijnor', 'Nagina', 'Moradabad', 'Rampur', 'Sambhal', 'Amroha', 'Meerut', 'Baghpat', 'Ghaziabad', 'Gautam Buddha Nagar', 'Bulandshahr', 'Aligarh', 'Hathras', 'Mathura', 'Agra', 'Fatehpur Sikri', 'Firozabad', 'Mainpuri', 'Etah', 'Badaun', 'Aonla', 'Bareilly', 'Pilibhit', 'Shahjahanpur', 'Kheri', 'Dhaurahra', 'Sitapur', 'Hardoi', 'Misrikh', 'Unnao', 'Mohanlalganj', 'Lucknow', 'Rae Bareli', 'Amethi', 'Sultanpur', 'Pratapgarh', 'Farrukhabad', 'Etawah', 'Kannauj', 'Kanpur Urban', 'Akbarpur', 'Jalaun', 'Jhansi', 'Hamirpur', 'Banda', 'Fatehpur', 'Kaushambi', 'Phulpur', 'Allahabad', 'Barabanki', 'Faizabad', 'Ambedkar Nagar', 'Bahraich', 'Kaiserganj', 'Shrawasti', 'Gonda', 'Domariyaganj', 'Basti', 'Sant Kabir Nagar', 'Maharajganj', 'Gorakhpur', 'Kushi Nagar', 'Deoria', 'Bansgaon', 'Lalganj', 'Azamgarh', 'Ghosi', 'Salempur', 'Ballia', 'Jaunpur', 'Machhlishahr', 'Ghazipur', 'Chandauli', 'Varanasi', 'Bhadohi', 'Mirzapur', 'Robertsganj'], 
-	    "Uttarakhand": ['', 'Tehri Garhwal', 'Garhwal', 'Almora', 'Nainital–Udhamsingh Nagar', 'Haridwar'],
-	    "West Bengal": ['', 'Cooch Behar', 'Alipurduars', 'Jalpaiguri', 'Darjeeling', 'Raiganj', 'Balurghat', 'Maldaha Uttar', 'Maldaha Dakshin', 'Jangipur', 'Baharampur', 'Murshidabad', 'Krishnanagar', 'Ranaghat', 'Bangaon', 'Barrackpur', 'Dum Dum', 'Barasat', 'Basirhat', 'Jaynagar', 'Mathurapur', 'Diamond Harbour', 'Jadavpur', 'Kolkata Dakshin', 'Kolkata Uttar', 'Howrah', 'Uluberia', 'Srerampur', 'Hooghly', 'Arambag', 'Tamluk', 'Kanthi', 'Ghatal', 'Jhargram', 'Medinipur', 'Purulia', 'Bankura', 'Bishnupur', 'Bardhaman Purba', 'Bardhaman–Durgapur', 'Asansol', 'Bolpur', 'Birbhum']
-	    };
-	    var e = document.getElementById("id_state");
-	    console.log("e=" + e);
-	    var selectedState = e.options[e.selectedIndex].value;
-	    console.log("selectedState = " + selectedState);
-	    var f = document.getElementById("id_constituency");
-	    console.log("f=" + f);
-	    cons_state_list = cons_list[selectedState];
-	    var i;
-	    for(i = f.options.length - 1 ; i >= 0 ; i--)
-	    {
-	        f.remove(i);
-	    }
-	    var j;
-	    for(j=0; j<cons_state_list.length; j++)
-	    {
-	      var option = document.createElement("option");
-	      option.text = cons_state_list[j];
-	      f.add(option);
-	    }
-	  }
+
+		function verifyPasswordMatch() {
+			var password = document.getElementById("id_password");
+			var confirm_password = document.getElementById("id_confirm_password");
+			var error_statement = document.createElement("tr");
+			var error_statement_child = document.createElement("td");
+			error_statement_child.setAttribute("colspan", 2);
+			error_statement.setAttribute("id", "password_error_text");
+			error_statement.setAttribute("style", "width: 100%; font-size: 10px; display: inline; color: red; float: right;");
+			if(password.value == confirm_password.value) {
+				correctedOnce = 1;
+				correctedPassword = 1;
+				if (correctedPassword == 1) {
+					$("#id_confirm_password").tooltip('dispose');
+					var error_state = document.getElementById("password_error_text");
+					if(error_state != null) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				password.style.border = "solid 4px green";
+				confirm_password.style.border = "solid 4px green";
+			}
+			else {
+				$("#id_confirm_password").tooltip({title: "PLEASE ENSURE THAT THE PASSWORD AND CONFIRMED PASSWORD FIELDS MATCH", delay: {show: 0, hide: 10000000}, trigger: "focus"});
+				var error_text = document.createTextNode("Password and Confirmed Password don't match");
+				error_statement_child.appendChild(error_text);
+				error_statement.appendChild(error_statement_child);
+				if (renderedPasswordErrorText == 0 || correctedOnce == 1) {
+					confirm_password.parentElement.parentElement.parentElement.insertBefore(error_statement, confirm_password.parentElement.parentElement);
+					renderedPasswordErrorText = 1;
+				}
+				if (correctedPassword == 1) {
+					var error_state = document.getElementById("password_error_text");
+					if (error_state) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				password.style.border = "solid 4px red";
+				confirm_password.style.border = "solid 4px red";
+			}
+		}
+
+		function verifyContactMatchV2() {
+			var contact_num_tag = document.getElementById("id_contact_num");
+			var error_statement = document.createElement("tr");
+			var error_statement_child = document.createElement("td");
+			error_statement_child.setAttribute("colspan", 2);
+			error_statement.setAttribute("id", "contact_error_text");
+			error_statement.setAttribute("style", "width: 100%; font-size: 10px; display: inline; color: red; float: right;");
+			if(/^[1-9]{1}[0-9]{9}$/.test(contact_num_tag.value)) {
+				correctedOnceContact = 1;
+				correctedContact = 1;
+				if (correctedContact == 1) {
+					$("#id_contact_num").tooltip('dispose');
+					var error_state = document.getElementById("contact_error_text");
+					if(error_state != null) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				contact_num_tag.style.border = "solid 4px green";
+			}
+			else {
+				$("#id_contact_num").tooltip({title: "PLEASE ENSURE THAT THE CONTACT NUMBER IS OF 10 DIGITS", delay: {show: 0, hide: 10000000}, trigger: "focus"});
+				var error_text = document.createTextNode("Contact Number should be of 10 digits");
+				error_statement_child.appendChild(error_text);
+				error_statement.appendChild(error_statement_child);
+				if (renderedContactErrorText == 0 || correctedOnceContact == 1) {
+					contact_num_tag.parentElement.parentElement.parentElement.insertBefore(error_statement, contact_num_tag.parentElement.parentElement);
+					renderedContactErrorText = 1;
+				}
+				if (correctedContact == 1) {
+					var error_state = document.getElementById("contact_error_text");
+					if (error_state) {
+						error_state.parentElement.removeChild(error_state);
+					}
+				}
+				contact_num_tag.style.border = "solid 4px red";
+			}
+		}
+
+		function verifyFields() {
+			var name = document.getElementById("id_name");
+			var email = document.getElementById("id_email_id");
+			var password = document.getElementById("id_password");
+			var confirm_password = document.getElementById("id_confirm_password");
+			var aadhar_num = document.getElementById("id_aadhar_num");
+			var contact_num = document.getElementById("id_contact_num");
+
+			if(validateEmail(email.value) && passwordConfirmed(password.value, confirm_password.value)) {
+				$("#modalLoginForm").modal();
+				return true;
+			}
+			return false;
+		}
+
+		function validateEmail() 
+		{
+			var email_tag = document.getElementById("id_email_id");
+
+		 if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email_tag.value))
+		  {
+		  	email_tag.style.border = "solid 4px green";
+		    return (true);
+		  }
+		    email_tag.style.border = "solid 4px red";
+		    return (false);
+		}
+
+		function passwordConfirmed(password, confirm_password)
+		{
+			return (password == confirm_password);
+		}
+</script>
+<script>
+	$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
 </script>
 <link type="text/css" href="/media/jquery/css/smoothness/jquery-ui-1.8.18.custom.css" rel="Stylesheet" />
 <script type="text/javascript" src="/media/jquery/js/jquery-1.7.1.min.js"></script>
@@ -83,8 +156,13 @@
 <script type="text/javascript" src="/media/jquery/development-bundle/ui/i18n/jquery.ui.datepicker-{{request.LANGUAGE_CODE}}.js"></script>
 </head>
 <body>
-	<div class="container-fluid" style="background: midnightblue; height: 210px; padding-top: 20px;">
+	<div class="container-fluid" style="background: midnightblue; background-image: linear-gradient(to right, midnightblue , slateblue); height: 210px; padding-top: 20px;">
 		<h1 style="font-family: 'Poppins'; color: #FFFFFF; position: relative; top: 30px; vertical-align: middle;" align="center">VOTER REGISTRATION PORTAL</h1>
+		<div class="text-center">
+			<button style="position: relative; top: 50px;" type="button" class="btn btn-raised btn-primary" data-toggle="modal" data-target="#modalLoginForm">
+				Guidelines for filling up this form
+			</button>
+		</div>
 	</div>
 	<div class="container-fluid" style="background: slateblue; height: 45px;">
 		<marquee style="color: yellow; position: relative; top: 10px;">Registration for Lok Sabha Elections 2019 have started. Please register yourself and your family members by or before 5th March, 2019 for the same. Thank you!</marquee>
@@ -95,8 +173,70 @@
 			<table align="center">
 				{{form.as_table}}
 			</table>
-			<input style = "position: relative; top: 140px;" align="center" type="submit" name="submit" value="Submit" class="btn-success" />
+			<br><br><br>
+			<table align="center">
+				<tr><th>
+			<input type="submit" name="submit" value="Submit" class="btn-success" onclick="verifyFields()" />
+			</tr>
+			</table>
 		</form>
 	</div>
+
+	<!-- EXTRAS -->
+	<!-- <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="defaultForm-email" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input type="password" id="defaultForm-pass" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="btn btn-default">Login</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold" style="color: midnightblue">Guidelines</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5" style="font-family: 'Poppins'; font-size: 15px;">
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">The email ID should be a valid one, we will verify it using OTP.</p><br><br>
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">The contact number should be of ten digits exactly, no need to enter country code (+91).</p><br><br>
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">Please ensure that you enter correct constituency.</p><br><br>
+          <i style="color: green;" class="fas fa-check-circle"></i>
+          <p style="display: inline;">Please ensure that the photograph that you upload should cover at least 50% of your face. If that requirement is not met you might not be eligible to vote.</p><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
