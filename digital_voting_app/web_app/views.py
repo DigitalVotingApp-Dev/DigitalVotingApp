@@ -103,7 +103,8 @@ def register_voter(request):
                 constituency = _constituency,
                 image = form.cleaned_data['voter_image'])
             voter.save()
-            return HttpResponseRedirect("/registration_successful/")
+            #return HttpResponseRedirect("/registration_successful/")
+            return HttpResponseRedirect("/login/")
         else:
             print("\n\n#DIGITAL_VOTING_APP#VIEWS#2: FOLLOWING ERRORS OCCURRED WHILE PROCESSING")
             print(form.errors)
@@ -131,15 +132,19 @@ def load_voter_profile(request):
 
 def login_voter(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST, request.FILES)
-        if form.is_valid:
-            _email_id = form.cleaned_data['email_id']
-            _password = form.cleaned_data['password']
-            voter = Voter.objects.get(email_id = _email_id)
-            if voter and _password == voter.password:
-                return HttpResponse('<h1>Logged in Successfully.</h1>')
+        _email_id = request.POST['voter_email_id']
+        _password = request.POST['voter_password']
+
+        voter = Voter.objects.get(email_id = _email_id)
+        _aadhar_num = voter.aadhar_num
+        redirect_url = "/profile/" + str(_aadhar_num)
+        if voter:
+            if _password == voter.password:
+                return HttpResponseRedirect(redirect_url)
             else:
-                return HttpResponse('<h1>Login attempt unsuccessful</h1>')
+                return HttpResponse("<h1>INVALID LOGIN DETAILS.</h1>")
+        else:
+            return HttpResponseRedirect("/register_voter");
     else:
-        form = LoginForm()
-    return render(request, 'web_app/login_voter.html', {'form':form})
+        return render(request, 'web_app/login_voter_v2.html')
+
