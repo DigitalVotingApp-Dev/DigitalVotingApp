@@ -1,0 +1,78 @@
+<html>
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/dig_app_styles.css' %}">
+	<style>
+	table {
+	  border-collapse: collapse;
+	}
+
+	th, td {
+	  text-align: left;
+	  padding: 8px;
+	}
+
+	tr:nth-child(even){background-color: #f2f2f2}
+
+	th {
+	  background-color: slateblue;
+	  color: white;
+	}
+	</style>
+</head>
+<body>
+	<div style="font-family: 'Poppins'; border: 70px solid midnightblue; background: white; padding: 40px;">
+	<p>Dear {{voter.name}},</p>
+	<p>You have been successfully registered for upcoming elections at <span style="color: red;">Igneous</span>. Your details are as under:</p>
+	<table>
+		<tr>
+			<th style="text-align: right;">Name:</th>
+			<td style="font-family: Montserrat">{{voter.name}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Age:</th>
+			<td style="font-family: Montserrat">{{voter.age}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Email:</th>
+			<td style="font-family: Montserrat">{{voter.email_id}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Contact:</th>
+			<td style="font-family: Montserrat">{{voter.contact_num}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Gender:</th>
+			<td style="font-family: Montserrat">{{voter.gender}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Father's Name:</th>
+			<td style="font-family: Montserrat">{{voter.father_name}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Mother's Name:</th>
+			<td style="font-family: Montserrat">{{voter.mother_name}}</td>
+		</tr>
+		<tr>
+			<th style="text-align: right;">Constituency:</th>
+			<td style="font-family: Montserrat">{{voter.constituency}}, {{voter.state}}</td>
+		</tr>
+	</table>
+
+	<br>
+	For any queries, please do not hesitate to reach out to us. Our email id is: <a href="mailto:digitalvotingapp@gmail.com">digitalvotingapp@gmail.com</a>
+	<br>
+	<p>Regards,</p>
+	<p>Igneous</p>
+</div>
+</body>
+</html>

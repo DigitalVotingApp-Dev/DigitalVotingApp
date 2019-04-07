@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Voter Registration</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -16,6 +17,67 @@
 	<script src="{% static 'js/notify.js' %}"></script>
 	<script src="{% static 'js/voter_registration.js' %}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<script>
+		$(document).ready(function(){
+		  $("#submitBtn").click(function(){
+		    $('.toast').toast('show');
+		  });
+		});
+</script>
+
+
+<style>
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: green;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 3;
+  left: 50%;
+  top: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;} 
+  to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {top: 30px; opacity: 1;} 
+  to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {top: 30px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+</style>
+
+<script>
+	function myFunction() {
+	  var x = document.getElementById("snackbar");
+	  x.className = "show";
+	  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 6000);
+	}
+</script>
+
 	<script type="text/javascript">
 		var renderedPasswordErrorText = 0;
 		var correctedPassword = 0;
@@ -23,15 +85,15 @@
 		var renderedContactErrorText = 0;
 		var correctedContact = 0;
 		var correctedOnceContact = 0;
-		function launch_toast() {
-		    var x = document.getElementById("toast")
-		    x.className = "show";
-		    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
-		}
+		// function launch_toast() {
+		//     var x = document.getElementById("toast")
+		//     x.className = "show";
+		//     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+		// }
 
-		function generate_notification() {
-			$.notify("Successfully registered", "success");
-		}
+		// function generate_notification() {
+		// 	$.notify("Successfully registered", "success");
+		// }
 
 		function verifyPasswordMatch() {
 			var password = document.getElementById("id_password");
@@ -111,39 +173,6 @@
 				contact_num_tag.style.border = "solid 4px red";
 			}
 		}
-
-		function verifyFields() {
-			var name = document.getElementById("id_name");
-			var email = document.getElementById("id_email_id");
-			var password = document.getElementById("id_password");
-			var confirm_password = document.getElementById("id_confirm_password");
-			var aadhar_num = document.getElementById("id_aadhar_num");
-			var contact_num = document.getElementById("id_contact_num");
-
-			if(validateEmail(email.value) && passwordConfirmed(password.value, confirm_password.value)) {
-				$("#modalLoginForm").modal();
-				return true;
-			}
-			return false;
-		}
-
-		function validateEmail() 
-		{
-			var email_tag = document.getElementById("id_email_id");
-
-		 if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email_tag.value))
-		  {
-		  	email_tag.style.border = "solid 4px green";
-		    return (true);
-		  }
-		    email_tag.style.border = "solid 4px red";
-		    return (false);
-		}
-
-		function passwordConfirmed(password, confirm_password)
-		{
-			return (password == confirm_password);
-		}
 </script>
 <script>
 	$(document).ready(function(){
@@ -176,43 +205,13 @@
 			<br><br><br>
 			<table align="center">
 				<tr><th>
-			<input type="submit" name="submit" value="Submit" class="btn-success" onclick="verifyFields()" />
+			<input id="submitBtn" type="submit" name="submit" value="Submit" class="btn-success" onclick="myFunction()" />
 			</tr>
 			</table>
 		</form>
 	</div>
 
-	<!-- EXTRAS -->
-	<!-- <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="defaultForm-email" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
-        </div>
-
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="defaultForm-pass" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-default">Login</button>
-      </div>
-    </div>
-  </div>
-</div> -->
+<!-- THE GUIDELINES MODAL -->
 <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -238,5 +237,8 @@
     </div>
   </div>
 </div>
+
+<!-- TOAST -->
+<div id="snackbar"><i style="color: green; display: inline;" class="fas fa-check-circle"></i> You have been successfully registered. Please Login to continue </div>
 </body>
 </html>

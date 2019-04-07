@@ -3,6 +3,10 @@ from django.http import HttpResponse,HttpResponseRedirect
 from web_app.models import Voter
 from .forms import VoterRegistrationForm, LoginForm
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
+from django.template.loader import render_to_string
 
 def index(request):
     #return HttpResponse("<h1>HELLO</h1>")
@@ -103,6 +107,12 @@ def register_voter(request):
                 constituency = _constituency,
                 image = form.cleaned_data['voter_image'])
             voter.save()
+            msg_html = render_to_string('web_app/email.html', {'voter': voter})
+            subject = 'REGISTRATION FOR ELECTIONS SUCCESSFUL'
+            message = 'Dear Voter, Your registration at Igneous for upcoming elections is successful.'
+            from_mail = settings.EMAIL_HOST_USER
+            to_list = [voter.email_id]
+            send_mail(subject, message, from_mail, to_list, html_message = msg_html, fail_silently=False)
             #return HttpResponseRedirect("/registration_successful/")
             return HttpResponseRedirect("/login/")
         else:
