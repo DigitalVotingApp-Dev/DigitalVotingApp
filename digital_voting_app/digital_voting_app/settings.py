@@ -18,6 +18,12 @@ from django.conf.urls.static import static
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'digitalvotingapp@gmail.com'
+EMAIL_HOST_PASSWORD = 'nitsrinagar03@'
+EMAIL_PORT = 587
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
