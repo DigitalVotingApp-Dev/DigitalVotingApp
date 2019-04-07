@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from django.template.loader import render_to_string
+from .face_detection_main import recognize_voter
 
 def index(request):
     #return HttpResponse("<h1>HELLO</h1>")
@@ -150,7 +151,12 @@ def login_voter(request):
         redirect_url = "/profile/" + str(_aadhar_num)
         if voter:
             if _password == voter.password:
-                return HttpResponseRedirect(redirect_url)
+                response = recognize_voter(voter.name, voter.image)
+                if response == True:
+                    return HttpResponseRedirect(redirect_url)
+                else:
+                    return HttpResponse("<h1>OTHER PERSON.</h1>")
+
             else:
                 return HttpResponse("<h1>INVALID LOGIN DETAILS.</h1>")
         else:
