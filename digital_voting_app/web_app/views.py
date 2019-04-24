@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from django.template.loader import render_to_string
-from .face_detection_main import recognize_voter
+#from .face_detection_main import recognize_voter
 
 def index(request):
     #return HttpResponse("<h1>HELLO</h1>")
@@ -108,6 +108,7 @@ def register_voter(request):
                 constituency = _constituency,
                 image = form.cleaned_data['voter_image'])
             voter.save()
+            #FOR SENDING REGISTRATION MAIL TO VOTER.
             msg_html = render_to_string('web_app/email.html', {'voter': voter})
             subject = 'REGISTRATION FOR ELECTIONS SUCCESSFUL'
             message = 'Dear Voter, Your registration at Igneous for upcoming elections is successful.'
@@ -135,7 +136,7 @@ def prompt_login(request):
 def load_voter_profile(request):
     arr = request.path.split('/')
     _aadhar_num = arr[2]
-    print("\n\nAADHAR NUMBER BEING SENT: " + _aadhar_num)
+    #print("\n\nAADHAR NUMBER BEING SENT: " + _aadhar_num)
     voter = Voter.objects.get(aadhar_num = _aadhar_num)
     #voter_details = Voter.present_voter(_aadhar_num)
     #print("VOTER DETAILS: " + voter_details['name'])
