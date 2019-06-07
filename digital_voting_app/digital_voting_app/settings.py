@@ -13,10 +13,13 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 from django.conf import settings
 from django.conf.urls.static import static
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -30,6 +33,7 @@ EMAIL_PORT = 587
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'q78aaplaq_gan1v8ylcx!j%tj(=t_1dgdo49d3cv7+@6-2x$(('
+ACCOUNT_SECURITY_API_KEY='Q4CxhypfJeMRyO9MGOAbNHuq0Y8EQzBg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,6 +49,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INSTALLED_APPS = [
     'web_app',
+    'account-security-quickstart-django-master',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

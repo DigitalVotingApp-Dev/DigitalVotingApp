@@ -8,6 +8,15 @@ from django.conf import settings
 from django.contrib import messages
 from django.template.loader import render_to_string
 #from .face_detection_main import recognize_voter
+from authy.api import AuthyApiClient
+from django.conf import settings
+from django.shortcuts import render, redirect
+
+from .forms import VerificationForm, TokenForm
+
+
+
+authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
 
 def index(request):
     #return HttpResponse("<h1>HELLO</h1>")
@@ -124,8 +133,9 @@ def register_voter(request):
                 print("**" + error + "**")
 
     else:
+        contactnum = request.GET['contactnum']
         form = VoterRegistrationForm()
-    return render(request, 'web_app/register_voter.html', {'form': form})
+    return render(request, 'web_app/register_voter.html', {'form': form, 'contactnum': contactnum})
 
 def prompt_login(request):
     arr = request.path.split('/')
@@ -165,3 +175,67 @@ def login_voter(request):
     else:
         return render(request, 'web_app/login_voter_v2.html')
 
+# def phone_verification(request):
+#     if request.method == 'POST':
+#         form = VerificationForm(request.POST)
+#         if form.is_valid():
+#             request.session['phone_number'] = form.cleaned_data['phone_number']
+#             request.session['country_code'] = form.cleaned_data['country_code']
+#             authy_api.phones.verification_start(
+#                 form.cleaned_data['phone_number'],
+#                 form.cleaned_data['country_code'],
+#                 via=form.cleaned_data['via']
+#             )
+#             return redirect('token_validation')
+#     else:
+#         form = VerificationForm()
+#     return render(request, 'web_app/phone_verification.html', {'form': form})
+
+def phone_verification(request):
+    if request.method == 'POST':
+        authy_api.phones.verification_start(
+            request.POST['contact'],
+            request.POST['countrycode'],
+            via=request.POST['via']
+        )
+        return redirect('token_validation')
+    else:
+        return redirect('token_validation')
+    return render(request, 'web_app/phone_verification.html', {'form': form})
+
+
+def token_validation(request):
+    if request.method == 'POST':
+        form = TokenForm(request.POST)
+        if form.is_valid():
+            verification = authy_api.phones.verification_check(
+                request.session['phone_number'],
+                request.session['country_code'],
+                form.cleaned_data['token']
+            )
+            if verification.ok():
+                request.session['is_verified'] = True
+                #return redirect('verified')
+                #return redirect('register_voter_action', contactnum = request.session['phone_number'])
+                return redirect('https://www.facebook.com', args=1)
+            else:
+                for error_msg in verification.errors().values():
+                    form.add_error(None, error_msg)
+    else:
+        form = TokenForm()
+    return render(request, 'web_app/token_validation.html', {'form': form})
+
+
+def verified(request):
+    if not request.session.get('is_verified'):
+        return redirect('phone_verification')
+    return render(request, 'web_app/verified.html')
+
+def index_page(request):
+    return render(request, 'web_app/index.html')
+
+def about_us_page(request):
+    return render(request, 'web_app/about.html')
+
+def contact_us_page(request):
+    return render(request, 'web_app/contact.html')
