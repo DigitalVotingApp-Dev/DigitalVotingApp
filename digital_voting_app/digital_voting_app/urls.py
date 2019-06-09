@@ -30,12 +30,13 @@ urlpatterns = [
     url('^login/', views.login_voter, name = 'login_voter_action'),
     url('^profile/', views.load_voter_profile, name = 'profile_voter_action'),
     url('^registration_successful/', views.prompt_login, name = 'prompt_login_action'),
-    url(r'^verification/$', views.phone_verification, name='phone_verification'),  # noqa: E501
-    url(r'^verification/token/$', views.token_validation, name='token_validation'),  # noqa: E501
-    url(r'^verified/$', views.verified, name='verified'),
-    url(r'^home/$', views.index_page, name='index_action'),
-    url(r'^about-us/$', views.about_us_page, name='about_action'),
-    url(r'^contact-us/$', views.contact_us_page, name = 'contact_action'),
+    url('^verification/$', views.phone_verification, name='phone_verification'),  # noqa: E501
+    url('^verification/token/$', views.token_validation, name='token_validation'),  # noqa: E501
+    url('^verified/$', views.verified, name='verified'),
+    url('^home/$', views.index_page, name='index_action'),
+    url('^about-us/$', views.about_us_page, name='about_action'),
+    url('^contact-us/$', views.contact_us_page, name = 'contact_action'),
+    url('^recognize-voter/$', views.recognize_voter, name='recognize_voter_action')
 ]
 if settings.DEBUG:
 	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

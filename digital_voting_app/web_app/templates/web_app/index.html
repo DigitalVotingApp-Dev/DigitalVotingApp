@@ -444,26 +444,27 @@
 			<div class="fh5co-heading" id="4">
 				<h2>Register for Voting!!</h2>
 			</div>
-			<form method="post" action="{% url 'phone_verification' %}" >
-				{% csrf_token %}
+			<!-- <form method="post" action="{% url 'phone_verification' %}" >
+				{% csrf_token %} -->
 
-				<div class="row form-group">
+				<!-- <div class="row form-group">
 					<div class="col-md-12">
-						<!-- <label for="email">Email</label> -->
-						<input name="contact" type="number" id="contact" class="form-control" placeholder="Your Mobile Number ">
+						<label for="email">Email</label> -->
+						<!-- <input name="contact" type="number" id="contact" class="form-control" placeholder="Your Mobile Number ">
 						<input name="countrycode" id="countrycode" class="form-control" placeholder="Your Country code">
 						<select name="via" class="form-control input-sm" id="id_via">
 						  <option value="sms">SMS</option>
 						  <option value="call">Call</option>
 						</select>
 					</div>
-				</div>
+				</div> -->
 
 				<div class="form-group">
-					<input type="submit" value="Verify Yourself" class="btn btn-primary">
+					<!-- <input type="submit" value="Verify Yourself" class="btn btn-primary"> -->
+					<a href="/verification">Verify Phone Number via OTP</a>
 				</div>
 
-			</form>	
+			<!-- </form>	 -->
 		</div>
 	</div>
 

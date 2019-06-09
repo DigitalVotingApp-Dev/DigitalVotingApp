@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
 from web_app.models import Voter
 from .forms import VoterRegistrationForm, LoginForm
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -7,15 +7,18 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from django.template.loader import render_to_string
-#from .face_detection_main import recognize_voter
+from .face_detection_main import recognize_voter_image
 from authy.api import AuthyApiClient
 from django.conf import settings
 from django.shortcuts import render, redirect
+import requests
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 from .forms import VerificationForm, TokenForm
 
 
-
+contact_num = 0
 authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
 
 def index(request):
@@ -133,9 +136,9 @@ def register_voter(request):
                 print("**" + error + "**")
 
     else:
-        contactnum = request.GET['contactnum']
+        #contactnum = request.GET['contactnum']
         form = VoterRegistrationForm()
-    return render(request, 'web_app/register_voter.html', {'form': form, 'contactnum': contactnum})
+    return render(request, 'web_app/register_voter.html', {'form': form, 'contactnum': contact_num})
 
 def prompt_login(request):
     arr = request.path.split('/')
@@ -152,6 +155,7 @@ def load_voter_profile(request):
     #print("VOTER DETAILS: " + voter_details['name'])
     return render(request, 'web_app/voter_profile.html', {'voter': voter})
 
+@csrf_exempt
 def login_voter(request):
     if request.method == 'POST':
         _email_id = request.POST['voter_email_id']
@@ -160,10 +164,16 @@ def login_voter(request):
         voter = Voter.objects.get(email_id = _email_id)
         _aadhar_num = voter.aadhar_num
         redirect_url = "/profile/" + str(_aadhar_num)
+        payload = {
+            'voter_name': voter.name,
+            'voter_image_path': voter.image.path
+        }
+        
         if voter:
             if _password == voter.password:
-                response = recognize_voter(voter.name, voter.image)
-                if response == True:
+                resp = requests.post(url='http://localhost:8000/recognize-voter/', data=payload, params=payload)
+                resp_json = resp.json()
+                if resp_json['status'] == 200:
                     return HttpResponseRedirect(redirect_url)
                 else:
                     return HttpResponse("<h1>OTHER PERSON.</h1>")
@@ -171,37 +181,50 @@ def login_voter(request):
             else:
                 return HttpResponse("<h1>INVALID LOGIN DETAILS.</h1>")
         else:
-            return HttpResponseRedirect("/register_voter");
+            return HttpResponseRedirect("/register_voter")
     else:
         return render(request, 'web_app/login_voter_v2.html')
 
-# def phone_verification(request):
-#     if request.method == 'POST':
-#         form = VerificationForm(request.POST)
-#         if form.is_valid():
-#             request.session['phone_number'] = form.cleaned_data['phone_number']
-#             request.session['country_code'] = form.cleaned_data['country_code']
-#             authy_api.phones.verification_start(
-#                 form.cleaned_data['phone_number'],
-#                 form.cleaned_data['country_code'],
-#                 via=form.cleaned_data['via']
-#             )
-#             return redirect('token_validation')
-#     else:
-#         form = VerificationForm()
-#     return render(request, 'web_app/phone_verification.html', {'form': form})
+@csrf_exempt
+def recognize_voter(request):
+    if request.method == 'POST':
+        voter_name = request.POST.get('voter_name')
+        voter_image_path = request.POST.get('voter_image_path')
+        response = recognize_voter_image(voter_name, voter_image_path)
+        if response == True:
+            return JsonResponse({'status': 200, 'recognized': 'true', 'errors': 'none'}, safe=False)
+        else:
+            return JsonResponse({'status': 404, 'recognized': 'false', 'errors': ''})
+    else:
+        return JsonResponse({'status': 400, 'recognized': 'false', 'errors': 'Only POST requests accepted'})
 
 def phone_verification(request):
     if request.method == 'POST':
-        authy_api.phones.verification_start(
-            request.POST['contact'],
-            request.POST['countrycode'],
-            via=request.POST['via']
-        )
-        return redirect('token_validation')
+        form = VerificationForm(request.POST)
+        if form.is_valid():
+            request.session['phone_number'] = form.cleaned_data['phone_number']
+            request.session['country_code'] = form.cleaned_data['country_code']
+            authy_api.phones.verification_start(
+                form.cleaned_data['phone_number'],
+                form.cleaned_data['country_code'],
+                via=form.cleaned_data['via']
+            )
+            return redirect('token_validation')
     else:
-        return redirect('token_validation')
+        form = VerificationForm()
     return render(request, 'web_app/phone_verification.html', {'form': form})
+
+# def phone_verification(request):
+#     # if request.method == 'POST':
+#     #     authy_api.phones.verification_start(
+#     #         request.POST['contact'],
+#     #         request.POST['countrycode'],
+#     #         via=request.POST['via']
+#     #     )
+#     #     return redirect('token_validation')
+#     # else:
+#     #     return redirect('token_validation')
+#     return render(request, 'web_app/phone_verification.html', {'form': form})
 
 
 def token_validation(request):
@@ -211,13 +234,14 @@ def token_validation(request):
             verification = authy_api.phones.verification_check(
                 request.session['phone_number'],
                 request.session['country_code'],
-                form.cleaned_data['token']
+                form.cleaned_data['token'],
             )
             if verification.ok():
                 request.session['is_verified'] = True
-                #return redirect('verified')
-                #return redirect('register_voter_action', contactnum = request.session['phone_number'])
-                return redirect('https://www.facebook.com', args=1)
+                global contact_num
+                contact_num = request.session['phone_number']
+                print("contact_num: " + contact_num)
+                return redirect('register_voter_action')
             else:
                 for error_msg in verification.errors().values():
                     form.add_error(None, error_msg)
